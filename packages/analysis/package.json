@@ -1,0 +1,40 @@
+{
+  "name": "utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "NICK",
+  "license": "MIT",
+  "dependencies": {
+    "inversify": "^4.13.0",
+    "inversify-tracer": "^1.2.0",
+    "jquery": "^3.2.1",
+    "jsdom": "^9.8.3",
+    "json-pointer": "^0.6.0",
+    "lodash": "^4.17.10",
+    "path-to-regexp": "^2.2.1",
+    "qs": "^6.5.2",
+    "reflect-metadata": "^0.1.12",
+    "require-directory": "^2.1.1",
+    "tracer": "^0.8.15",
+    "typescript": "^2.8.3",
+    "urijs": "^1.19.1"
+  },
+  "devDependencies": {
+    "@types/urijs": "^1.15.38",
+    "@types/inversify": "^2.0.33",
+    "@types/jsdom": "^2.0.32",
+    "@types/json-pointer": "^1.0.30",
+    "@types/lodash": "^4.14.108",
+    "@types/node": "^10.0.4",
+    "@types/qs": "^6.5.1",
+    "@types/require-directory": "^2.1.0",
+    "babel-loader": "^7.1.4",
+    "ts-loader": "^4.3.0",
+    "webpack": "^4.8.1",
+    "webpack-cli": "^2.1.3"
+  }
+}
