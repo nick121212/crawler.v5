@@ -3,10 +3,10 @@ import pathToRegexp from "path-to-regexp";
 
 import { IQueueItem } from "./models/queueitem";
 import QueueSettings from "./models/queuesetting";
-import { Queue } from "./libs/queue";
-import { DiscoverLinks } from "./libs/discover";
+import { Queue } from "./link/queue";
+import { DiscoverLinks } from "./link/discover";
 import analysis from "./page/analysis";
-import DiscoverSettings from "models/discoversetting";
+import DiscoverSettings from "./models/discoversetting";
 
 /**
  * 把地址转换成uri的格式
