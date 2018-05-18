@@ -1,7 +1,14 @@
-import _, { AnyKindOfDictionary } from "lodash";
-import requireDir from "require-directory";
-
+import _ from "lodash";
 import { Base } from "./base";
+import { IQueueItem } from "../../models/queueitem";
+
+import area from "./area";
+import array from "./array";
+import case1 from "./case";
+import normal from "./normal";
+import object from "./object";
+import or1 from "./or";
+import switch1 from "./switch";
 
 /**
  * 处理html文本策越
@@ -14,11 +21,13 @@ export class Strategy extends Base {
     constructor() {
         super();
 
-        _.each(requireDir(module, "./"), (deal: any, key: string) => {
-            if (key !== "base") {
-                this.deals[key] = deal.default;
-            }
-        });
+        this.deals.area = area;
+        this.deals.array = array;
+        this.deals.case = case1;
+        this.deals.normal = normal;
+        this.deals.object = object;
+        this.deals.or = or1;
+        this.deals.switch = switch1;
 
         _.forEach(this.deals, (deal: any) => {
             if (deal) {
@@ -29,11 +38,11 @@ export class Strategy extends Base {
 
     /**
      * 开始处理文本
-     * @param   {Object}  queueItem 数据
-     * @param   {Object}  rule      配置
+     * @param   {IQueueItem}  queueItem 数据
+     * @param   {Object}      rule      配置
      * @returns {Promise}
      */
-    public async doDeal(queueItem: any, rule: any): Promise<any> {
+    public async doDeal(queueItem: IQueueItem, rule: any): Promise<any> {
         let promiseAll: any = [];
         let dataResults = {};
         let check = (results: any) => {

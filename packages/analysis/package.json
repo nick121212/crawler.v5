@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ni": "npm i"
   },
   "author": "NICK",
   "license": "MIT",
   "dependencies": {
+    "blueimp-md5": "^2.10.0",
     "inversify": "^4.13.0",
     "inversify-tracer": "^1.2.0",
-    "jquery": "^3.2.1",
+    "jquery": "^3.3.1",
     "jsdom": "^9.8.3",
     "json-pointer": "^0.6.0",
     "lodash": "^4.17.10",
@@ -24,15 +26,26 @@
     "urijs": "^1.19.1"
   },
   "devDependencies": {
-    "@types/urijs": "^1.15.38",
     "@types/inversify": "^2.0.33",
+    "@types/jquery": "^3.3.2",
     "@types/jsdom": "^2.0.32",
     "@types/json-pointer": "^1.0.30",
     "@types/lodash": "^4.14.108",
     "@types/node": "^10.0.4",
+    "@types/path-to-regexp": "^1.7.0",
     "@types/qs": "^6.5.1",
     "@types/require-directory": "^2.1.0",
+    "@types/urijs": "^1.15.38",
     "babel-loader": "^7.1.4",
+    "babel-plugin-transform-runtime": "^6.22.0",
+    "babel-plugin-transform-vue-jsx": "^3.5.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.3.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.22.0",
+    "raw-loader": "^0.5.1",
+    "text-loader": "^0.0.1",
     "ts-loader": "^4.3.0",
     "webpack": "^4.8.1",
     "webpack-cli": "^2.1.3"

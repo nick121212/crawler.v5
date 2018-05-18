@@ -13,12 +13,13 @@ fs.readdirSync("node_modules")
 
 module.exports = {
     entry: [
-        "./index.ts"
+        "./index.ts",
+        "./test.ts"
     ],
     mode: "development",
     output: {
         path: path.resolve(__dirname, "build"),
-        filename: "index.js",
+        // filename: "index.js",
         libraryTarget: "commonjs2"
     },
     context: path.resolve(__dirname, "src"),
@@ -28,26 +29,34 @@ module.exports = {
     },
     module: {
         rules: [{
-            test: /\.ts$/,
-            exclude: [
-                path.resolve(__dirname, "node_modules"),
-                path.resolve(__dirname, "build"),
-            ],
-            loaders: ["babel-loader", "ts-loader"]
-        }, {
-            test: /\.js$/,
-            loader: "babel-loader",
-            exclude: [
-                path.resolve(__dirname, "node_modules"),
-                path.resolve(__dirname, "build"),
+            test: /jquery/,
+            use: [
+                {
+                    loader: 'raw-loader',
+                    options: {
+                        limit: '1024'
+                    }
+                },
             ]
         }, {
-            test: /\.json$/,
-            loader: "json-loader"
+            test: /\.js$/,
+            include: [
+                path.join(__dirname, "..", "src")
+            ],
+            loaders: ["babel-loader"]
+        }, {
+            test: /\.ts$/,
+            exclude: /node_modules/,
+            use: [{
+                loader: "ts-loader",
+                options: {
+                    transpileOnly: true
+                }
+            }]
         }]
     },
     resolve: {
-        extensions: [".ts", ".js", ".json"]
+        extensions: [".js", ".json", ".ts", ".tsx"]
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin()

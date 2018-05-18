@@ -1,13 +1,10 @@
-import * as requireDir from "require-directory";
-import * as _ from "lodash";
-
 export class FormatStrategy {
     private formats: any = {};
 
     constructor() {
-        _.each(requireDir(module, "./"), (format: any, key: string) => {
-            this.formats[key] = format.default;
-        });
+        // _.each(requireDir(module, "./"), (format: any, key: string) => {
+        //     this.formats[key] = format.default;
+        // });
     }
 
     /**

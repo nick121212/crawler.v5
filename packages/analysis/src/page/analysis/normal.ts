@@ -34,7 +34,10 @@ export class Strategy extends Base {
             if (data.key) {
                 path.push(data.key);
             }
-            res.result && jData.set(jpp.compile(path), this.doFormatData(res.result, data.formats));
+
+            if (res.result) {
+                jData.set(jpp.compile(path), this.doFormatData(res.result, data.formats));
+            }
 
             return res;
         });

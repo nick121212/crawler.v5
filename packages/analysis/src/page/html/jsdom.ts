@@ -1,8 +1,10 @@
 import _ from "lodash";
 import jsdom from "jsdom";
-import _fs from "fs";
+import jq from "jquery/dist/jquery.js";
 
-const jquery = _fs.readFileSync(`${__dirname}/../../../node_modules/jquery/dist/jquery.min.js`, "utf-8");
+// const jq = require("raw-loader!jquery/dist/jquery.js");
+
+// console.log(jq);
 
 export class JsDomDealStrategy {
 
@@ -64,7 +66,7 @@ export class JsDomDealStrategy {
             jsdom.env({
                 html: queueItem.responseBody.replace(/iframe/g, "iframe1"),
                 parsingMode: "html",
-                src: [jquery],
+                src: [jq],
                 done: function (err: Error, window: any) {
                     if (err) {
                         return reject(err);
