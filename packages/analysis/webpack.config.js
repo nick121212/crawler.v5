@@ -13,7 +13,6 @@ fs.readdirSync("node_modules")
 
 module.exports = {
     entry: [
-        "./index.ts",
         "./test.ts"
     ],
     mode: "development",
