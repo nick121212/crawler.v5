@@ -1,8 +1,9 @@
 {
-  "name": "utils",
+  "name": "cralwer.v5.utils",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "ni": "npm i"
@@ -10,8 +11,11 @@
   "author": "NICK",
   "license": "MIT",
   "dependencies": {
+    "@types/jsonata": "^1.3.0",
     "inversify": "^4.13.0",
     "inversify-tracer": "^1.2.0",
+    "jsonata": "^1.5.4",
+    "qs": "^6.5.2",
     "reflect-metadata": "^0.1.12",
     "tracer": "^0.8.15",
     "typescript": "^2.8.3"
@@ -19,6 +23,7 @@
   "devDependencies": {
     "@types/inversify": "^2.0.33",
     "@types/jsdom": "^2.0.32",
+    "@types/qs": "^6.5.1",
     "babel-loader": "^7.1.4",
     "ts-loader": "^4.3.0",
     "webpack": "^4.8.1",

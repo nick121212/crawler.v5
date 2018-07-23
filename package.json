@@ -15,5 +15,8 @@
   "license": "MIT",
   "dependencies": {
     "lerna": "^2.4.0"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.3.5"
   }
 }

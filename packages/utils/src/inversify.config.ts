@@ -1,14 +1,19 @@
 import { Container } from "inversify";
-import { TYPES } from "./types";
-import { Warrior, Weapon, ThrowableWeapon, Logs } from "./interfaces";
-import { Ninja, Katana, Shuriken } from "./entities";
-import { ColorLogs } from "./logs";
+import { Tracer } from "tracer";
+
+import { colorLog, log } from "./services/logs";
+import { Jsonata, MomentFunc, CombineFunc, QsFunc, JparseFunc, IFunc } from "./services/jsonata";
 
 const utilsContainer = new Container();
 
-utilsContainer.bind<Warrior>(TYPES.Warrior).to(Ninja);
-utilsContainer.bind<Weapon>(TYPES.Weapon).to(Katana);
-utilsContainer.bind<ThrowableWeapon>(TYPES.ThrowableWeapon).to(Shuriken);
-utilsContainer.bind<Logs>(TYPES.Logs).to(ColorLogs).inSingletonScope();
+// log相关
+utilsContainer.bind<Tracer.Logger>("log").toConstantValue(log).whenTargetTagged("color", false);
+utilsContainer.bind<Tracer.Logger>("log").toConstantValue(colorLog).whenTargetTagged("color", true);
+
+utilsContainer.bind<IFunc>("func").to(CombineFunc);
+utilsContainer.bind<IFunc>("func").to(MomentFunc);
+utilsContainer.bind<IFunc>("func").to(QsFunc);
+utilsContainer.bind<IFunc>("func").to(JparseFunc);
+utilsContainer.bind<Jsonata>(Jsonata).toSelf();
 
 export { utilsContainer };

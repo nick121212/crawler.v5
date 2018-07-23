@@ -1,1 +1,1 @@
-export {};
+export { utilsContainer } from "./inversify.config";
