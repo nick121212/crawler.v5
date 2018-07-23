@@ -27,9 +27,9 @@ export declare class MQueueService {
      * @param options        消息的消费方法
      * @param consumeMsg     回调方法
      * @param prefetch       每次获取的消息数量
-     * @param delay          延迟时间
+     * @param delayTime      延迟时间
      */
-    start(queueName: string, options: Options.Connect, consumeMsg: (msgData: any) => Promise<any>, prefech?: number, delay?: number): Promise<boolean>;
+    start(queueName: string, options: Options.Connect, consumeMsg: (msgData: any) => Promise<any>, prefech?: number, delayTime?: number): Promise<boolean>;
     /**
      * 初始化队列
      * @param rabbitmqConfig mq的配置

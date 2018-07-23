@@ -48,7 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var amqplib_1 = require("amqplib");
-var bluebird_1 = require("bluebird");
+var bluebird = require("bluebird");
 // import * as _ from "lodash";
 var inversify_1 = require("inversify");
 // import { SettingModel } from "../models/setting";
@@ -129,11 +129,11 @@ var MQueueService = /** @class */ (function () {
      * @param options        消息的消费方法
      * @param consumeMsg     回调方法
      * @param prefetch       每次获取的消息数量
-     * @param delay          延迟时间
+     * @param delayTime      延迟时间
      */
-    MQueueService.prototype.start = function (queueName, options, consumeMsg, prefech, delay) {
+    MQueueService.prototype.start = function (queueName, options, consumeMsg, prefech, delayTime) {
         if (prefech === void 0) { prefech = 3; }
-        if (delay === void 0) { delay = 1000; }
+        if (delayTime === void 0) { delayTime = 1000; }
         return __awaiter(this, void 0, void 0, function () {
             var queue, channel, _a, _b, err_1;
             var _this = this;
@@ -182,7 +182,7 @@ var MQueueService = /** @class */ (function () {
                                                 this.channel.nack(msg);
                                             }
                                             return [2 /*return*/];
-                                        case 3: return [4 /*yield*/, bluebird_1.default.delay(delay || 1000)];
+                                        case 3: return [4 /*yield*/, bluebird.delay(delayTime)];
                                         case 4:
                                             _a.sent();
                                             _a.label = 5;

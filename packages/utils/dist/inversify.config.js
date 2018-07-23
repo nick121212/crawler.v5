@@ -23,6 +23,11 @@ mq.start("test", {
     password: "871233"
 }, function (data) {
     console.log(data);
+    if (data.a === 10) {
+        setTimeout(function () {
+            mq.destroy(true);
+        }, 1000);
+    }
     return data;
 });
 console.log(mq.queueName);

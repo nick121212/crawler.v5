@@ -1,6 +1,6 @@
 import { connect, Connection, Channel, Options, Replies, Message } from "amqplib";
 import { Tracer } from "tracer";
-import bluebird from "bluebird";
+import * as bluebird from "bluebird";
 // import * as _ from "lodash";
 import { injectable, inject, tagged } from "inversify";
 
@@ -68,9 +68,9 @@ export class MQueueService {
      * @param options        消息的消费方法
      * @param consumeMsg     回调方法
      * @param prefetch       每次获取的消息数量
-     * @param delay          延迟时间
+     * @param delayTime      延迟时间
      */
-    public async start(queueName: string, options: Options.Connect, consumeMsg: (msgData: any) => Promise<any>, prefech = 3, delay = 1000) {
+    public async start(queueName: string, options: Options.Connect, consumeMsg: (msgData: any) => Promise<any>, prefech = 3, delayTime = 1000) {
         let queue: Replies.AssertQueue;
 
         this.queueName = queueName;
@@ -104,7 +104,7 @@ export class MQueueService {
                     return;
                 }
 
-                await bluebird.delay(delay || 1000);
+                await bluebird.delay(delayTime);
 
                 try {
                     await consumeMsg(msgData);

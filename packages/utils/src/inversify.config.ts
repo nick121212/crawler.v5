@@ -28,6 +28,12 @@ mq.start("test", {
 }, (data: any) => {
     console.log(data);
 
+    if (data.a === 10) {
+        setTimeout(() => {
+            mq.destroy(true);
+        }, 1000);
+    }
+
     return data;
 });
 
