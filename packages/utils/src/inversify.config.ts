@@ -3,6 +3,7 @@ import { Tracer } from "tracer";
 
 import { colorLog, log } from "./services/logs";
 import { MQueueService } from "./services/rabbitmq";
+import { EsStoreService } from "./services/elastic";
 import { Jsonata, MomentFunc, CombineFunc, QsFunc, JparseFunc, IFunc } from "./services/jsonata";
 
 const utilsContainer = new Container();
@@ -19,6 +20,9 @@ utilsContainer.bind<Jsonata>(Jsonata).toSelf();
 
 // rabbitmq 相关
 utilsContainer.bind<MQueueService>(MQueueService).toSelf();
+
+// es 相关
+utilsContainer.bind<EsStoreService>(EsStoreService).toSelf();
 
 // const mq = utilsContainer.get(MQueueService);
 

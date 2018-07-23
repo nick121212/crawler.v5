@@ -19,8 +19,7 @@ export class MQueueService {
     private exchange?: Replies.AssertExchange = undefined;
 
     constructor(@inject("log") @tagged("color", true) private $logger: Tracer.Logger) {
-        this.$logger.info("mq constructor");
-
+        // this.$logger.info("mq constructor");
     }
 
     /**

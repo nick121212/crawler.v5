@@ -63,7 +63,7 @@ var MQueueService = /** @class */ (function () {
         this.channel = undefined;
         this.consume = undefined;
         this.exchange = undefined;
-        this.$logger.info("mq constructor");
+        // this.$logger.info("mq constructor");
     }
     /**
     * 销毁队列
