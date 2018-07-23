@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/jsonata": "^1.3.0",
+    "amqplib": "^0.5.2",
     "inversify": "^4.13.0",
     "inversify-tracer": "^1.2.0",
     "jsonata": "^1.5.4",
@@ -21,6 +22,7 @@
     "typescript": "^2.8.3"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.5.8",
     "@types/inversify": "^2.0.33",
     "@types/jsdom": "^2.0.32",
     "@types/qs": "^6.5.1",
