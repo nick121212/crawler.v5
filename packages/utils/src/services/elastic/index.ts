@@ -28,7 +28,7 @@ export class EsStoreService {
     private client!: Client;
 
     constructor(@inject("log") @tagged("color", true) private $logger: Tracer.Logger) {
-        this.$logger.info("mq constructor");
+        this.$logger.info("elasticsearch constructor");
     }
 
     /**
@@ -194,7 +194,7 @@ export class EsStoreService {
      * esIndex 索引
      * esType  类型
      */
-    public async getItem({ _id, esIndex, esType }: { _id: any; esIndex: string; esType: string }) {
+    public async getItem(_id: any, esIndex: string, esType: string) {
         return await this.client.get({
             id: _id,
             index: esIndex,
@@ -202,7 +202,7 @@ export class EsStoreService {
         });
     }
 
-    public async scroll({ esIndex, esType, scrollId }: { esIndex: string; esType: string, scrollId: string }) {
+    public async scroll(esIndex: string, esType: string, scrollId: string) {
 
         this.$logger.debug("------------------------", scrollId, esIndex, esType);
 
@@ -220,7 +220,11 @@ export class EsStoreService {
         });
     }
 
-    public async init(globalOptions: ConfigOptions) {
+    /**
+     * 初始化
+     * @param globalOptions 设置项
+     */
+    public async init(globalOptions: ConfigOptions): Promise<EsStoreService> {
         this.client = new Client(globalOptions);
         this.client.ping({
             requestTimeout: 3000
@@ -231,6 +235,8 @@ export class EsStoreService {
         });
 
         await bluebird.delay(200);
+
+        return this;
     }
 
     /**

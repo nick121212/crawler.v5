@@ -41,17 +41,13 @@ export declare class EsStoreService {
      * esIndex 索引
      * esType  类型
      */
-    getItem({ _id, esIndex, esType }: {
-        _id: any;
-        esIndex: string;
-        esType: string;
-    }): Promise<import("../../../node_modules/.5.0.25@@types/elasticsearch/index").GetResponse<{}>>;
-    scroll({ esIndex, esType, scrollId }: {
-        esIndex: string;
-        esType: string;
-        scrollId: string;
-    }): Promise<import("../../../node_modules/.5.0.25@@types/elasticsearch/index").SearchResponse<{}>>;
-    init(globalOptions: ConfigOptions): Promise<void>;
+    getItem(_id: any, esIndex: string, esType: string): Promise<import("../../../node_modules/.5.0.25@@types/elasticsearch/index").GetResponse<{}>>;
+    scroll(esIndex: string, esType: string, scrollId: string): Promise<import("../../../node_modules/.5.0.25@@types/elasticsearch/index").SearchResponse<{}>>;
+    /**
+     * 初始化
+     * @param globalOptions 设置项
+     */
+    init(globalOptions: ConfigOptions): Promise<EsStoreService>;
     /**
      * pick 字段
      * @param result 数据

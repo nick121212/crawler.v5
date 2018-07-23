@@ -72,7 +72,7 @@ var _fields = [
 var EsStoreService = /** @class */ (function () {
     function EsStoreService($logger) {
         this.$logger = $logger;
-        this.$logger.info("mq constructor");
+        this.$logger.info("elasticsearch constructor");
     }
     /**
      * 保存分析出来的链接地址
@@ -247,26 +247,24 @@ var EsStoreService = /** @class */ (function () {
      * esIndex 索引
      * esType  类型
      */
-    EsStoreService.prototype.getItem = function (_a) {
-        var _id = _a._id, esIndex = _a.esIndex, esType = _a.esType;
+    EsStoreService.prototype.getItem = function (_id, esIndex, esType) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0: return [4 /*yield*/, this.client.get({
                             id: _id,
                             index: esIndex,
                             type: esType
                         })];
-                    case 1: return [2 /*return*/, _b.sent()];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    EsStoreService.prototype.scroll = function (_a) {
-        var esIndex = _a.esIndex, esType = _a.esType, scrollId = _a.scrollId;
+    EsStoreService.prototype.scroll = function (esIndex, esType, scrollId) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         this.$logger.debug("------------------------", scrollId, esIndex, esType);
                         if (!scrollId) return [3 /*break*/, 2];
@@ -274,17 +272,21 @@ var EsStoreService = /** @class */ (function () {
                                 scrollId: scrollId,
                                 scroll: "300s"
                             })];
-                    case 1: return [2 /*return*/, _b.sent()];
+                    case 1: return [2 /*return*/, _a.sent()];
                     case 2: return [4 /*yield*/, this.client.search({
                             index: esIndex,
                             type: esType,
                             scroll: "300s"
                         })];
-                    case 3: return [2 /*return*/, _b.sent()];
+                    case 3: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
+    /**
+     * 初始化
+     * @param globalOptions 设置项
+     */
     EsStoreService.prototype.init = function (globalOptions) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
@@ -302,7 +304,7 @@ var EsStoreService = /** @class */ (function () {
                         return [4 /*yield*/, bluebird.delay(200)];
                     case 1:
                         _a.sent();
-                        return [2 /*return*/];
+                        return [2 /*return*/, this];
                 }
             });
         });

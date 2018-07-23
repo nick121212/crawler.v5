@@ -24,11 +24,25 @@ utilsContainer.bind<MQueueService>(MQueueService).toSelf();
 // es 相关
 utilsContainer.bind<EsStoreService>(EsStoreService).toSelf();
 
+// const es = utilsContainer.get(EsStoreService);
+
+// es.init({
+//     "host": "localhost:9200",
+//     "httpAuth": "",
+//     "sniffInterval": 30000,
+//     "requestTimeout": 20000,
+//     "keepAlive": true
+// }).then((esStore: EsStoreService) => {
+//     // esStore.getItem();
+
+//     console.log(esStore);
+// });
+
 // const mq = utilsContainer.get(MQueueService);
 
 // mq.start("test", {
 //     protocol: "amqps",
-//     hostname: "www.lait.tv",
+//     hostname: "localhost",
 //     username: "crawler",
 //     password: "871233"
 // }, (data: any) => {
