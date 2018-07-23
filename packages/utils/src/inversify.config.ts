@@ -10,33 +10,35 @@ const utilsContainer = new Container();
 // log相关
 utilsContainer.bind<Tracer.Logger>("log").toConstantValue(log).whenTargetTagged("color", false);
 utilsContainer.bind<Tracer.Logger>("log").toConstantValue(colorLog).whenTargetTagged("color", true);
-
+// jsonata 相关
 utilsContainer.bind<IFunc>("func").to(CombineFunc);
 utilsContainer.bind<IFunc>("func").to(MomentFunc);
 utilsContainer.bind<IFunc>("func").to(QsFunc);
 utilsContainer.bind<IFunc>("func").to(JparseFunc);
 utilsContainer.bind<Jsonata>(Jsonata).toSelf();
+
+// rabbitmq 相关
 utilsContainer.bind<MQueueService>(MQueueService).toSelf();
 
-const mq = utilsContainer.get(MQueueService);
+// const mq = utilsContainer.get(MQueueService);
 
-mq.start("test", {
-    protocol: "amqps",
-    hostname: "www.lait.tv",
-    username: "crawler",
-    password: "871233"
-}, (data: any) => {
-    console.log(data);
+// mq.start("test", {
+//     protocol: "amqps",
+//     hostname: "www.lait.tv",
+//     username: "crawler",
+//     password: "871233"
+// }, (data: any) => {
+//     console.log(data);
 
-    if (data.a === 10) {
-        setTimeout(() => {
-            mq.destroy(true);
-        }, 1000);
-    }
+//     if (data.a === 10) {
+//         setTimeout(() => {
+//             mq.destroy(true);
+//         }, 1000);
+//     }
 
-    return data;
-});
+//     return data;
+// });
 
-console.log(mq.queueName);
+// console.log(mq.queueName);
 
 export { utilsContainer };
