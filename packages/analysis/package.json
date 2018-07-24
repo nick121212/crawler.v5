@@ -20,6 +20,7 @@
     "json-pointer": "^0.6.0",
     "lodash": "^4.17.10",
     "modelproxy": "^1.0.33",
+    "modelproxy-engine-fetch": "^1.0.33",
     "node-horseman": "^3.3.0",
     "path-to-regexp": "^2.2.1",
     "phantomjs": "^2.1.7+deprecated",

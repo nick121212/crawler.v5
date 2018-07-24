@@ -28,6 +28,8 @@ var superagent_1 = require("./engines/superagent");
 exports.SuperAgentEngine = superagent_1.SuperAgentEngine;
 var request_1 = require("./engines/request");
 exports.RequestEngine = request_1.RequestEngine;
+var picdown_1 = require("./engines/picdown");
+exports.PicDownEngine = picdown_1.PicDownEngine;
 let Downloader = class Downloader {
     constructor($proxy, engines, $logger) {
         this.$proxy = $proxy;

@@ -19,7 +19,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const modelproxy_1 = require("modelproxy");
 const inversify_1 = require("inversify");
-const Horseman = require("node-horseman");
+const fs = require("fs");
+const modelproxy_engine_fetch_1 = require("modelproxy-engine-fetch");
+const _ = require("lodash");
+// tslint:disable-next-line:no-unused-expression
+new modelproxy_engine_fetch_1.FetchEngine();
 let PicDownEngine = class PicDownEngine extends modelproxy_1.BaseEngine {
     /**
      * 构造
@@ -72,47 +76,60 @@ let PicDownEngine = class PicDownEngine extends modelproxy_1.BaseEngine {
             return ctx.result;
         });
     }
-    house(url, headers, proxyInfo) {
-        let horseman, horsemanSetting = {
-            timeout: 30000,
-            loadImages: false,
-            ignoreSSLErrors: true
-        }, resources = {};
-        if (proxyInfo) {
-            horsemanSetting.proxy = proxyInfo;
-            horsemanSetting.proxyType = "http";
-        }
-        return new Promise((resolve, reject) => {
-            let rtn = { statusCode: 0, body: "" };
-            horseman = new Horseman(horsemanSetting);
-            horseman
-                .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/538.1 (KHTML, like Gecko) Safari/538.")
-                .on("resourceReceived", (res) => {
-                console.log(res);
-                resources[res.url] = res;
-            })
-                .on("resourceRequested", (req) => {
-                console.log("Request " + JSON.stringify(req, undefined, 4));
-            })
-                .headers(headers)
-                .open(url)
-                .wait(500)
-                .status()
-                .then((statusCode) => {
-                rtn.statusCode = statusCode;
-            })
-                .html()
-                .then((body) => {
-                rtn.body = body;
-            })
-                .close()
-                .then(() => {
-                resolve(rtn);
-            }).catch((err) => {
-                console.log(err);
-                reject(err);
-            });
-        });
+    house(url, headers, _proxyInfo) {
+        return fetch(url, {
+            headers
+        }).then((res) => __awaiter(this, void 0, void 0, function* () {
+            if (res.ok && res.status === 200 && res.body) {
+                const fileExt = res.headers.get("content-type") || "jpeg";
+                const dest = fs.createWriteStream("/srv/pictures/" + encodeURIComponent(url) + "." + _.last(fileExt.split("/")));
+                return new Promise((resolve, reject) => {
+                    if (res.body) {
+                        res.body.pipe(dest);
+                        dest.on("finish", () => {
+                            resolve(res);
+                        });
+                        dest.on("error", err => {
+                            reject(err);
+                        });
+                    }
+                });
+            }
+            return res;
+        }));
+        // let horseman: any,
+        //     horsemanSetting: any = {
+        //         timeout: 30000,
+        //         loadImages: false,
+        //         ignoreSSLErrors: true
+        //     },
+        //     resources: any = {};
+        // if (proxyInfo) {
+        //     horsemanSetting.proxy = proxyInfo;
+        //     horsemanSetting.proxyType = "http";
+        // }
+        // return new Promise((resolve, reject) => {
+        //     let rtn = { statusCode: 0, body: "" };
+        //     horseman = new Horseman(horsemanSetting);
+        //     horseman
+        //         .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/538.1 (KHTML, like Gecko) Safari/538.")
+        //         .on("resourceReceived", (res: any) => {
+        //             console.log(res);
+        //             resources[res.url] = res;
+        //         })
+        //         .on("resourceRequested", (req: any) => {
+        //             console.log("Request " + JSON.stringify(req, undefined, 4));
+        //         })
+        //         .headers(headers)
+        //         .download(url, "/srv/pictures/a.jpeg")
+        //         .close()
+        //         .then(() => {
+        //             resolve(rtn);
+        //         }).catch((err: Error) => {
+        //             console.log(err);
+        //             reject(err);
+        //         });
+        // });
     }
 };
 PicDownEngine = __decorate([

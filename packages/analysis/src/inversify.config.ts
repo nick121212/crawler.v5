@@ -2,7 +2,7 @@ import { Container, ContainerModule, interfaces, decorate, injectable } from "in
 import { utilsContainer } from "crawler.v5.utils";
 import { BaseEngine, Compose, ModelProxy } from "modelproxy";
 
-import { Downloader, PhantomEngine, RequestEngine, SuperAgentEngine } from "./download";
+import { Downloader, PhantomEngine, RequestEngine, SuperAgentEngine, PicDownEngine } from "./download";
 import { Linker } from "./link";
 import {
     AnalysisStrategy, BaseAnalysis, AreaStrategy, ArrayStrategy, CaseStrategy,
@@ -22,6 +22,7 @@ const downloader = new ContainerModule((bind: interfaces.Bind) => {
     bind<BaseEngine<any>>("ModelProxyEngine").to(PhantomEngine);
     bind<BaseEngine<any>>("ModelProxyEngine").to(RequestEngine);
     bind<BaseEngine<any>>("ModelProxyEngine").to(SuperAgentEngine);
+    bind<BaseEngine<any>>("ModelProxyEngine").to(PicDownEngine);
 
     bind<ModelProxy>(ModelProxy).toSelf().inSingletonScope();
     bind<Downloader>(Downloader).toSelf().inSingletonScope();

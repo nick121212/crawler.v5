@@ -16,6 +16,7 @@ const downloader = new inversify_1.ContainerModule((bind) => {
     bind("ModelProxyEngine").to(download_1.PhantomEngine);
     bind("ModelProxyEngine").to(download_1.RequestEngine);
     bind("ModelProxyEngine").to(download_1.SuperAgentEngine);
+    bind("ModelProxyEngine").to(download_1.PicDownEngine);
     bind(modelproxy_1.ModelProxy).toSelf().inSingletonScope();
     bind(download_1.Downloader).toSelf().inSingletonScope();
 });

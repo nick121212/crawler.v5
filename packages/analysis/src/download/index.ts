@@ -6,6 +6,7 @@ import { Tracer } from "tracer";
 export { PhantomEngine } from "./engines/phantom";
 export { SuperAgentEngine } from "./engines/superagent";
 export { RequestEngine } from "./engines/request";
+export { PicDownEngine } from "./engines/picdown";
 
 @injectable()
 export class Downloader {
