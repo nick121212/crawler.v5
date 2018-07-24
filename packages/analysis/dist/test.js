@@ -1,6 +1,30 @@
-import { analysisHtmlToJson } from "./page";
-import { getAllowsUrls, formatUrlsToUri } from "./link";
-import { downloadUrl } from "./download";
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_1 = require("cralwer.v5.utils/dist/services/elastic/index");
+const index_2 = require("cralwer.v5.utils/dist/services/rabbitmq/index");
+const inversify_1 = require("inversify");
+const download_1 = require("./download");
+const link_1 = require("./link");
 const config = {
     "pages": [{
             "key": "main-123",
@@ -68,24 +92,66 @@ const config1 = {
     },
     "urls": ["http://www.yaolan.com", "http://bbs.yaolan.com"]
 };
-downloadUrl("http://www.yaolan.com", {}).then((data) => {
-    config.queueItem.responseBody = data.responseBody;
-}).then(() => {
-    return getAllowsUrls(config.queueItem, {
-        "parseHTMLComments": false,
-        "parseScriptTags": false,
-        "allowedProtocols": ["http", "https"],
-        "whitePathList": [{ "path": "/(.*?)", "enable": true }],
-        "userAgent": "",
-        "fetchWhitelistedMimeTypesBelowMaxDepth": false,
-        "maxDepth": 0,
-        "ignoreRobots": true
-    }, config1.queueConfig);
-}).then((allowUrls) => {
-    console.log(allowUrls.length);
-    return analysisHtmlToJson(config.queueItem, config.pages);
-}).then((data) => {
-    console.log(JSON.stringify(data));
-    return formatUrlsToUri(["www.yaolan.com"], config.queueItem, config1.queueConfig);
-}).then(console.log);
+let Test = class Test {
+    constructor($downloader, $linker, $mq, $es) {
+        // Tracer.
+        this.$downloader = $downloader;
+        this.$linker = $linker;
+        this.$mq = $mq;
+        this.$es = $es;
+        $mq.start("yaolan", {
+            protocol: "amqp",
+            hostname: "localhost",
+            username: "crawler",
+            password: "871233"
+        }, (data) => __awaiter(this, void 0, void 0, function* () {
+            return this.doDeal(data.url).then((d) => {
+                return d;
+            }).catch((e) => {
+                console.log("--------------", e);
+            });
+        }), 1, 3000).then(() => {
+            return this.doDeal("http://www.yaolan.com");
+        });
+    }
+    doDeal(url) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.$downloader.start(url, {}).then((data) => {
+                config.queueItem.responseBody = data.responseBody;
+                return this.$linker.getAllowsUrls(config.queueItem, {
+                    "parseHTMLComments": false,
+                    "parseScriptTags": false,
+                    "allowedProtocols": ["http", "https"],
+                    "whitePathList": [{ "path": "/(.*?)", "enable": true }],
+                    "userAgent": "",
+                    "fetchWhitelistedMimeTypesBelowMaxDepth": false,
+                    "maxDepth": 0,
+                    "ignoreRobots": true
+                }, config1.queueConfig);
+            }).then((allowUrls) => __awaiter(this, void 0, void 0, function* () {
+                yield this.$es.init({
+                    "host": "localhost:9200",
+                    "httpAuth": "",
+                    "sniffInterval": 30000,
+                    "requestTimeout": 20000,
+                    "keepAlive": true
+                });
+                yield this.$es.saveUrls(allowUrls, "yaolan", "urls");
+                return this.$mq.addItemsToQueue(allowUrls);
+            }));
+        });
+    }
+};
+Test = __decorate([
+    inversify_1.injectable(),
+    __param(0, inversify_1.inject(download_1.Downloader)),
+    __param(1, inversify_1.inject(link_1.Linker)),
+    __param(2, inversify_1.inject(index_2.MQueueService)),
+    __param(3, inversify_1.inject(index_1.EsStoreService)),
+    __metadata("design:paramtypes", [download_1.Downloader,
+        link_1.Linker,
+        index_2.MQueueService,
+        index_1.EsStoreService])
+], Test);
+exports.Test = Test;
 //# sourceMappingURL=/srv/crawler.v5/packages/analysis/maps/test.js.map

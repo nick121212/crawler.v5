@@ -1,8 +1,10 @@
-import uri from "urijs";
-import _ from "lodash";
-import pathToRegexp from "path-to-regexp";
-import { suffixs, whitelistedMimeTypes, discoverRegex } from "./constant";
-export class DiscoverLinks {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const uri = require("urijs");
+const _ = require("lodash");
+const pathToRegexp = require("path-to-regexp");
+const constant_1 = require("./constant");
+class DiscoverLinks {
     /**
      * 构造函数
      * @param settings  {object}
@@ -60,7 +62,7 @@ export class DiscoverLinks {
      * @returns boolean
      */
     extendSupported(suffix) {
-        return !suffixs.some((value) => {
+        return !constant_1.suffixs.some((value) => {
             return value === suffix.toLowerCase();
         });
     }
@@ -98,6 +100,7 @@ export class DiscoverLinks {
                     .normalize();
             }
             catch (e) {
+                console.log(e.message);
                 return list;
             }
             // url是否为空
@@ -175,7 +178,7 @@ export class DiscoverLinks {
         return maxDepth === 0 ||
             (queueItem.depth || 1) <= maxDepth ||
             whitelistedDepth <= maxDepth &&
-                whitelistedMimeTypes.some(function (mimeCheck) {
+                constant_1.whitelistedMimeTypes.some(function (mimeCheck) {
                     return mimeCheck.test(queueItem.stateData.contentType);
                 });
     }
@@ -230,7 +233,7 @@ export class DiscoverLinks {
         if (!parseScriptTags) {
             responseBody = responseBody.replace(/<script(.*?)>([\s\S]*?)<\/script>/gi, "");
         }
-        return discoverRegex
+        return constant_1.discoverRegex
             .reduce((list, regex) => {
             let resources = typeof regex === "function" ?
                 regex(responseBody) :
@@ -245,4 +248,5 @@ export class DiscoverLinks {
         }, []);
     }
 }
+exports.DiscoverLinks = DiscoverLinks;
 //# sourceMappingURL=/srv/crawler.v5/packages/analysis/maps/link/discover.js.map

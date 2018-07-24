@@ -1,4 +1,6 @@
-export class FormatStrategy {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class FormatStrategy {
     constructor() {
         this.formats = {};
         // _.each(requireDir(module, "./"), (format: any, key: string) => {
@@ -24,5 +26,6 @@ export class FormatStrategy {
         }
     }
 }
-export default new FormatStrategy();
+exports.FormatStrategy = FormatStrategy;
+exports.default = new FormatStrategy();
 //# sourceMappingURL=/srv/crawler.v5/packages/analysis/maps/page/format/index.js.map

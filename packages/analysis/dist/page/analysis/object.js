@@ -1,8 +1,21 @@
-import _ from "lodash";
-import jpp from "json-pointer";
-import { Base } from "./base";
-import jsdom from "../html/jsdom";
-export class Strategy extends Base {
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const lodash_1 = require("lodash");
+const json_pointer_1 = require("json-pointer");
+const inversify_1 = require("inversify");
+const base_1 = require("./base");
+const jsdom_1 = require("../html/jsdom");
+let ObjectStrategy = class ObjectStrategy extends base_1.BaseAnalysis {
+    constructor() {
+        super(...arguments);
+        this.ayalysisName = "object";
+    }
     /**
      * 解析对象的数据
      * @param   {any}     queueItem 当前连接的配置数据
@@ -13,15 +26,15 @@ export class Strategy extends Base {
      * @returns {Promise}
      */
     doDeal(queueItem, data, results, $, index) {
-        let promise = jsdom.doDeal(queueItem, data, $, index).then((res) => {
-            let jData = jpp(results);
+        let promise = jsdom_1.default.doDeal(queueItem, data, $, index).then((res) => {
+            let jData = json_pointer_1.default(results);
             let path = [];
-            let idx = _.isUndefined(res.data.dataIndex) ? res.index : res.data.dataIndex;
-            if (typeof idx === "number" && _.isArray(results)) {
+            let idx = lodash_1.default.isUndefined(res.data.dataIndex) ? res.index : res.data.dataIndex;
+            if (typeof idx === "number" && lodash_1.default.isArray(results)) {
                 path.push(idx.toString());
             }
             if (path) {
-                results = jData.get(jpp.compile(path));
+                results = jData.get(json_pointer_1.default.compile(path));
             }
             results[data.key] = {};
             res.result = results[data.key];
@@ -32,6 +45,9 @@ export class Strategy extends Base {
         });
         return promise;
     }
-}
-export default new Strategy();
+};
+ObjectStrategy = __decorate([
+    inversify_1.injectable()
+], ObjectStrategy);
+exports.ObjectStrategy = ObjectStrategy;
 //# sourceMappingURL=/srv/crawler.v5/packages/analysis/maps/page/analysis/object.js.map

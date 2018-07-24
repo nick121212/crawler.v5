@@ -1,7 +1,9 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 处理html文本策越
  */
-export class Strategy {
+class Strategy {
     /**
      * null转换"""
      * @param {any}             reseult
@@ -18,5 +20,6 @@ export class Strategy {
         return result;
     }
 }
-export default new Strategy();
+exports.Strategy = Strategy;
+exports.default = new Strategy();
 //# sourceMappingURL=/srv/crawler.v5/packages/analysis/maps/page/format/join.js.map

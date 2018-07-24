@@ -1,4 +1,4 @@
-import { ConfigOptions } from "elasticsearch";
+import { ConfigOptions, GetResponse, SearchResponse } from "elasticsearch";
 import { Tracer } from "tracer";
 export declare class EsStoreService {
     private $logger;
@@ -41,8 +41,14 @@ export declare class EsStoreService {
      * esIndex 索引
      * esType  类型
      */
-    getItem(_id: any, esIndex: string, esType: string): Promise<import("../../../node_modules/.5.0.25@@types/elasticsearch/index").GetResponse<{}>>;
-    scroll(esIndex: string, esType: string, scrollId: string): Promise<import("../../../node_modules/.5.0.25@@types/elasticsearch/index").SearchResponse<{}>>;
+    getItem(_id: any, esIndex: string, esType: string): Promise<GetResponse<any>>;
+    /**
+     * scroll 所有的记录
+     * @param esIndex  index
+     * @param esType   type
+     * @param scrollId id
+     */
+    scroll(esIndex: string, esType: string, scrollId: string): Promise<SearchResponse<any>>;
     /**
      * 初始化
      * @param globalOptions 设置项

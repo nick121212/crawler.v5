@@ -4,6 +4,7 @@ import { BaseEngine } from "modelproxy";
 import { IProxyCtx } from "modelproxy/out/models/proxyctx";
 import { IInterfaceModel } from "modelproxy/out/models/interface";
 import { IExecute } from "modelproxy/out/models/execute";
+import { injectable } from "inversify";
 
 // import chart from "superagent-charset";
 // import proxy from "superagent-proxy";
@@ -11,7 +12,8 @@ import { IExecute } from "modelproxy/out/models/execute";
 // chart(request);
 // proxy(request);
 
-export class SuperAgentEngine extends BaseEngine {
+@injectable()
+export class SuperAgentEngine extends BaseEngine<any> {
     public engineName = "superagent";
     /**
      * 构造

@@ -2,11 +2,13 @@ import { BaseEngine } from "modelproxy";
 import { IProxyCtx } from "modelproxy/out/models/proxyctx";
 import { IInterfaceModel } from "modelproxy/out/models/interface";
 import { IExecute } from "modelproxy/out/models/execute";
+import { injectable } from "inversify";
 // import * as request from "request-promise";
 
 const request = require("request-promise");
 
-export class RequestEngine extends BaseEngine {
+@injectable()
+export class RequestEngine extends BaseEngine<any> {
     public engineName = "request";
     /**
      * 构造

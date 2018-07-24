@@ -1,22 +1,12 @@
-import uri from "urijs";
-import _ from "lodash";
-import qs from "qs";
-import pathToRegexp from "path-to-regexp";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const uri = require("urijs");
+const _ = require("lodash");
+const qs = require("qs");
+const pathToRegexp = require("path-to-regexp");
 const md5 = require("blueimp-md5");
 const QUEUE_ITEM_INITIAL_DEPTH = 1;
-export class Queue {
-    // private ignoreWWWDomain: boolean;
-    // private scanSubdomains: boolean;
-    // private stripWWWDomain: boolean;
-    // private host: string;
-    // private initialProtocol: string;
-    // private initialPort: number;
-    // private domainWhiteList: Array<any>;
-    // private fetchConditions: Array<any>;
-    // private filterByDomain: boolean;
-    // private stripQuerystring: boolean;
-    // private allowQueryParams: Array<string>;
-    // private urlEncoding = "iso8859";
+class Queue {
     /**
      * 构造函数
      * @param settings {object}
@@ -32,17 +22,6 @@ export class Queue {
      *   filterByDomain    boolean       是否开启过滤域名白名单
      */
     constructor(settings) {
-        // this.ignoreWWWDomain = settings.ignoreWWWDomain == null ? true : settings.ignoreWWWDomain;
-        // this.scanSubdomains = settings.scanSubdomains == null ? false : settings.scanSubdomains;
-        // this.stripWWWDomain = settings.stripWWWDomain == null ? true : settings.stripWWWDomain;
-        // this.host = settings.host || "";
-        // this.initialProtocol = settings.initialProtocol || "http";
-        // this.domainWhiteList = settings.domainWhiteList;
-        // this.initialPort = settings.initialPort || 80;
-        // this.fetchConditions = settings.fetchConditions || [];
-        // this.filterByDomain = settings.filterByDomain == null ? true : settings.filterByDomain;
-        // this.stripQuerystring = settings.stripQuerystring == null ? true : settings.stripQuerystring;
-        // this.allowQueryParams = settings.allowQueryParams || [];
         this.settings = settings;
         this.settings = Object.assign({
             ignoreWWWDomain: true,
@@ -180,7 +159,7 @@ export class Queue {
             };
         }
         else {
-            console.log("域名不正确", parsedURL.hostname);
+            // console.log("域名不正确", parsedURL.hostname);
         }
         return false;
     }
@@ -249,4 +228,5 @@ export class Queue {
             (scanSubdomains && isSubdomainOf(hostname, host));
     }
 }
+exports.Queue = Queue;
 //# sourceMappingURL=/srv/crawler.v5/packages/analysis/maps/link/queue.js.map

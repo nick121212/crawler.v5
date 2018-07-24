@@ -1,7 +1,13 @@
 import _ from "lodash";
-import { Base } from "./base";
+import { injectable } from "inversify";
 
-export class Strategy extends Base {
+import { BaseAnalysis } from "./base";
+import { IQueueItem } from "../../models/queueitem";
+
+@injectable()
+
+export class OrStrategy extends BaseAnalysis {
+    public ayalysisName = "or";
     /**
      * 有些数据会出现在多个地方，一个地方匹配则返回
      * @param   {any}     queueItem 当前连接的配置数据
@@ -11,7 +17,7 @@ export class Strategy extends Base {
      * @param   {any}     index     当前的数组索引
      * @returns {Promise}
      */
-    public doDeal(queueItem: any, data: any, results: any, $: any, index: number): Promise<any> {
+    public doDeal(queueItem: IQueueItem, data: any, results: any, $: any, index: number): Promise<any> {
         if (data.key) {
             _.each(data.data, (d: any) => {
                 d.key = data.key;
@@ -34,5 +40,3 @@ export class Strategy extends Base {
         });
     }
 }
-
-export default new Strategy();

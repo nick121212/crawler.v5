@@ -1,7 +1,7 @@
 import { injectable, inject, tagged } from "inversify";
 import * as bluebird from "bluebird";
 import * as _ from "lodash";
-import { Client, ConfigOptions } from "elasticsearch";
+import { Client, ConfigOptions, GetResponse, SearchResponse } from "elasticsearch";
 import { Tracer } from "tracer";
 
 const _fields = [
@@ -194,7 +194,7 @@ export class EsStoreService {
      * esIndex 索引
      * esType  类型
      */
-    public async getItem(_id: any, esIndex: string, esType: string) {
+    public async getItem(_id: any, esIndex: string, esType: string): Promise<GetResponse<any>> {
         return await this.client.get({
             id: _id,
             index: esIndex,
@@ -202,7 +202,13 @@ export class EsStoreService {
         });
     }
 
-    public async scroll(esIndex: string, esType: string, scrollId: string) {
+    /**
+     * scroll 所有的记录
+     * @param esIndex  index
+     * @param esType   type
+     * @param scrollId id
+     */
+    public async scroll(esIndex: string, esType: string, scrollId: string): Promise<SearchResponse<any>> {
 
         this.$logger.debug("------------------------", scrollId, esIndex, esType);
 
@@ -226,12 +232,15 @@ export class EsStoreService {
      */
     public async init(globalOptions: ConfigOptions): Promise<EsStoreService> {
         this.client = new Client(globalOptions);
-        this.client.ping({
+
+        await this.client.ping({
             requestTimeout: 3000
         }).then(() => {
             this.$logger.info("elasticsearh as well");
         }, (err: Error) => {
             this.$logger.error("elasticsearch cluster is down!", err);
+
+            throw err;
         });
 
         await bluebird.delay(200);

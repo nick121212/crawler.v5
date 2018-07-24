@@ -1,6 +1,9 @@
-import { analysisHtmlToJson } from "./page";
-import { getAllowsUrls, formatUrlsToUri } from "./link";
-import { downloadUrl } from "./download";
+import { EsStoreService } from "cralwer.v5.utils/dist/services/elastic/index";
+import { MQueueService } from "cralwer.v5.utils/dist/services/rabbitmq/index";
+import { injectable, inject } from "inversify";
+
+import { Downloader } from "./download";
+import { Linker } from "./link";
 
 const config = {
     "pages": [{
@@ -71,25 +74,59 @@ const config1 = {
     "urls": ["http://www.yaolan.com", "http://bbs.yaolan.com"]
 };
 
-downloadUrl("http://www.yaolan.com", {}).then((data) => {
-    config.queueItem.responseBody = data.responseBody;
-}).then(() => {
-    return getAllowsUrls(config.queueItem, {
-        "parseHTMLComments": false,
-        "parseScriptTags": false,
-        "allowedProtocols": ["http", "https"],
-        "whitePathList": [{ "path": "/(.*?)", "enable": true }],
-        "userAgent": "",
-        "fetchWhitelistedMimeTypesBelowMaxDepth": false,
-        "maxDepth": 0,
-        "ignoreRobots": true
-    }, config1.queueConfig);
-}).then((allowUrls) => {
-    console.log(allowUrls.length);
+@injectable()
+export class Test {
+    constructor(
+        @inject(Downloader) private $downloader: Downloader,
+        @inject(Linker) private $linker: Linker,
+        @inject(MQueueService) private $mq: MQueueService,
+        @inject(EsStoreService) private $es: EsStoreService
+    ) {
 
-    return analysisHtmlToJson(config.queueItem, config.pages);
-}).then((data) => {
-    console.log(JSON.stringify(data));
+        // Tracer.
 
-    return formatUrlsToUri(["www.yaolan.com"], config.queueItem, config1.queueConfig);
-}).then(console.log);
+        $mq.start("yaolan", {
+            protocol: "amqp",
+            hostname: "localhost",
+            username: "crawler",
+            password: "871233"
+        }, async (data: any) => {
+            return this.doDeal(data.url).then((d: any) => {
+                return d;
+            }).catch((e) => {
+                console.log("--------------", e);
+            });
+        }, 1, 3000).then(() => {
+            return this.doDeal("http://www.yaolan.com");
+        });
+    }
+
+    private async doDeal(url: string) {
+        this.$downloader.start(url, {}).then((data: any) => {
+            config.queueItem.responseBody = data.responseBody;
+
+            return this.$linker.getAllowsUrls(config.queueItem, {
+                "parseHTMLComments": false,
+                "parseScriptTags": false,
+                "allowedProtocols": ["http", "https"],
+                "whitePathList": [{ "path": "/(.*?)", "enable": true }],
+                "userAgent": "",
+                "fetchWhitelistedMimeTypesBelowMaxDepth": false,
+                "maxDepth": 0,
+                "ignoreRobots": true
+            }, config1.queueConfig);
+        }).then(async (allowUrls: any[]) => {
+            await this.$es.init({
+                "host": "localhost:9200",
+                "httpAuth": "",
+                "sniffInterval": 30000,
+                "requestTimeout": 20000,
+                "keepAlive": true
+            });
+
+            await this.$es.saveUrls(allowUrls, "yaolan", "urls");
+
+            return this.$mq.addItemsToQueue(allowUrls);
+        });
+    }
+}

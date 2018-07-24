@@ -1,9 +1,14 @@
-import * as _ from "lodash";
+import _ from "lodash";
+import { injectable } from "inversify";
 
-import { Base } from "./base";
+import { BaseAnalysis } from "./base";
 import jsdom from "../html/jsdom";
+import { IQueueItem } from "../../models/queueitem";
 
-export class Strategy extends Base {
+@injectable()
+
+export class SwitchStrategy extends BaseAnalysis {
+    public ayalysisName = "switch";
     /**
      * 为了解决元素错位的问题，这里会使用特殊的解析方式
      * 这里会选择一个匹配的元素，并获取值，用于case的匹配
@@ -14,7 +19,7 @@ export class Strategy extends Base {
      * @param   {any}     index     当前的数组索引
      * @returns Promise
      */
-    public doDeal(queueItem: any, data: any, results: any, $: any, index: number): Promise<any> {
+    public doDeal(queueItem: IQueueItem, data: any, results: any, $: any, index: number): Promise<any> {
         return jsdom.doDeal(queueItem, data, $, index).then((res) => {
             let promises: Array<any> = [];
 
@@ -41,5 +46,3 @@ export class Strategy extends Base {
         });
     }
 }
-
-export default new Strategy();

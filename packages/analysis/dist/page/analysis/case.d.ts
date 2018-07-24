@@ -1,5 +1,7 @@
-import { Base } from "./base";
-export declare class Strategy extends Base {
+import { BaseAnalysis } from "./base";
+import { IQueueItem } from "../../models/queueitem";
+export declare class CaseStrategy extends BaseAnalysis {
+    ayalysisName: string;
     /**
      * case模式，必须配合switch来使用
      * 为了解决元素错位的问题，这里会使用特殊的解析方式
@@ -10,7 +12,5 @@ export declare class Strategy extends Base {
      * @param   {any}     index     当前的数组索引
      * @returns Promise
      */
-    doDeal(queueItem: any, data: any, results: any, $: any, index: number): Promise<any>;
+    doDeal(queueItem: IQueueItem, data: any, results: any, $: any, index: number): Promise<any>;
 }
-declare const _default: Strategy;
-export default _default;

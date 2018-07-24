@@ -1,9 +1,14 @@
 import _ from "lodash";
+import { injectable } from "inversify";
 
 import dataDeal from "../format";
+import { IQueueItem } from "../../models/queueitem";
 
-export class Base {
-    protected deals: any = {};
+@injectable()
+
+export class BaseAnalysis {
+    public ayalysisName = "";
+    public deals: any = {};
 
     /**
      * 处理data数据
@@ -14,7 +19,7 @@ export class Base {
      * @param index      {Number}
      * @return {Array<Promise>}
      */
-    public doDealData(queueItem: any, data: any, results: any, $: any, index: number): Array<Promise<any>> {
+    public doDealData(queueItem: IQueueItem, data: any, results: any, $: any, index: number): Array<Promise<any>> {
         let promises: Array<any> = [];
         let strategy: { doDeal: (queueItem: any, data: any, results: any, $: any, index: number) => Promise<any> };
 
@@ -34,8 +39,8 @@ export class Base {
 
     /**
      * 数据的格式化函数
-     * @param  {String}        result  
-     * @param  {Array<Object>} formats 
+     * @param  {String}        result  返回的数据
+     * @param  {Array<Object>} formats 需要处理的方法集
      * @return {String|Number} 返回数据
      */
     public doFormatData(result: any, formats: Array<{ key: string, settings: Object }>): any {

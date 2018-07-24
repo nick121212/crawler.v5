@@ -1,7 +1,7 @@
 import { BaseEngine } from "modelproxy";
 import { IInterfaceModel } from "modelproxy/out/models/interface";
 import { IExecute } from "modelproxy/out/models/execute";
-export declare class SuperAgentEngine extends BaseEngine {
+export declare class SuperAgentEngine extends BaseEngine<any> {
     engineName: string;
     /**
      * 构造

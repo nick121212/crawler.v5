@@ -1,0 +1,7 @@
+node_modules
+.history
+.vscode
+src
+package-lock.json
+webpack.config.js
+tsconfig.json

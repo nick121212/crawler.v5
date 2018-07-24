@@ -1,7 +1,13 @@
-import { Base } from "./base";
-import jsdom from "../html/jsdom";
+import { injectable } from "inversify";
 
-export class Strategy extends Base {
+import { BaseAnalysis } from "./base";
+import jsdom from "../html/jsdom";
+import { IQueueItem } from "../../models/queueitem";
+
+@injectable()
+
+export class CaseStrategy extends BaseAnalysis {
+    public ayalysisName = "case";
     /**
      * case模式，必须配合switch来使用
      * 为了解决元素错位的问题，这里会使用特殊的解析方式
@@ -12,7 +18,7 @@ export class Strategy extends Base {
      * @param   {any}     index     当前的数组索引
      * @returns Promise
      */
-    public doDeal(queueItem: any, data: any, results: any, $: any, index: number): Promise<any> {
+    public doDeal(queueItem: IQueueItem, data: any, results: any, $: any, index: number): Promise<any> {
         let promise = jsdom.doDeal(queueItem, data, $, index).then((res) => {
             if (!res.result || res.result.indexOf(res.data.match) < 0) {
                 res = null;
@@ -27,5 +33,3 @@ export class Strategy extends Base {
         return promise;
     }
 }
-
-export default new Strategy();

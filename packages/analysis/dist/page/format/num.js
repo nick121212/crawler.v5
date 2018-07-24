@@ -1,7 +1,9 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 处理html文本策越
  */
-export class Strategy {
+class Strategy {
     /**
      * 转换成数字类型
      * @param reseult {Any}
@@ -15,5 +17,6 @@ export class Strategy {
         return res;
     }
 }
-export default new Strategy();
+exports.Strategy = Strategy;
+exports.default = new Strategy();
 //# sourceMappingURL=/srv/crawler.v5/packages/analysis/maps/page/format/num.js.map

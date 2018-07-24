@@ -1,6 +1,6 @@
-import uri from "urijs";
-import _ from "lodash";
-import pathToRegexp from "path-to-regexp";
+import * as uri from "urijs";
+import * as _ from "lodash";
+import * as pathToRegexp from "path-to-regexp";
 
 import { IQueueItem } from "../models/queueitem";
 import DiscoverSettings from "../models/discoversetting";
@@ -114,6 +114,7 @@ export class DiscoverLinks {
                         .absoluteTo(queueItem.url || "")
                         .normalize();
                 } catch (e) {
+                    console.log(e.message);
                     return list;
                 }
 

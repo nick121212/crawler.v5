@@ -1,4 +1,4 @@
-import { Container } from "inversify";
+import { Container, ContainerModule, interfaces } from "inversify";
 import { Tracer } from "tracer";
 
 import { colorLog, log } from "./services/logs";
@@ -6,27 +6,38 @@ import { MQueueService } from "./services/rabbitmq";
 import { EsStoreService } from "./services/elastic";
 import { Jsonata, MomentFunc, CombineFunc, QsFunc, JparseFunc, IFunc } from "./services/jsonata";
 
-const utilsContainer = new Container();
+export const utilsContainer = new Container();
+
+export const logs = new ContainerModule((bind: interfaces.Bind) => {
+    bind<Tracer.Logger>("log").toConstantValue(log).whenTargetTagged("color", false);
+    bind<Tracer.Logger>("log").toConstantValue(colorLog).whenTargetTagged("color", true);
+});
+
+export const jsonata = new ContainerModule((bind: interfaces.Bind) => {
+    bind<IFunc>("func").to(CombineFunc);
+    bind<IFunc>("func").to(MomentFunc);
+    bind<IFunc>("func").to(QsFunc);
+    bind<IFunc>("func").to(JparseFunc);
+    bind<Jsonata>(Jsonata).toSelf();
+});
+
+export const mq = new ContainerModule((bind: interfaces.Bind) => {
+    bind<MQueueService>(MQueueService).toSelf();
+});
+
+export const es = new ContainerModule((bind: interfaces.Bind) => {
+    bind<EsStoreService>(EsStoreService).toSelf();
+});
+
+utilsContainer.load(logs, jsonata, mq, es);
 
 // log相关
-utilsContainer.bind<Tracer.Logger>("log").toConstantValue(log).whenTargetTagged("color", false);
-utilsContainer.bind<Tracer.Logger>("log").toConstantValue(colorLog).whenTargetTagged("color", true);
 // jsonata 相关
-utilsContainer.bind<IFunc>("func").to(CombineFunc);
-utilsContainer.bind<IFunc>("func").to(MomentFunc);
-utilsContainer.bind<IFunc>("func").to(QsFunc);
-utilsContainer.bind<IFunc>("func").to(JparseFunc);
-utilsContainer.bind<Jsonata>(Jsonata).toSelf();
-
 // rabbitmq 相关
-utilsContainer.bind<MQueueService>(MQueueService).toSelf();
-
 // es 相关
-utilsContainer.bind<EsStoreService>(EsStoreService).toSelf();
+// const es1: EsStoreService = utilsContainer.get(EsStoreService);
 
-// const es = utilsContainer.get(EsStoreService);
-
-// es.init({
+// es1.init({
 //     "host": "localhost:9200",
 //     "httpAuth": "",
 //     "sniffInterval": 30000,
@@ -36,6 +47,8 @@ utilsContainer.bind<EsStoreService>(EsStoreService).toSelf();
 //     // esStore.getItem();
 
 //     console.log(esStore);
+// }).catch((e: Error) => {
+//     console.log("---------",e);
 // });
 
 // const mq = utilsContainer.get(MQueueService);
@@ -58,5 +71,3 @@ utilsContainer.bind<EsStoreService>(EsStoreService).toSelf();
 // });
 
 // console.log(mq.queueName);
-
-export { utilsContainer };

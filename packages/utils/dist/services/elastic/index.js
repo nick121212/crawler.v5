@@ -261,6 +261,12 @@ var EsStoreService = /** @class */ (function () {
             });
         });
     };
+    /**
+     * scroll 所有的记录
+     * @param esIndex  index
+     * @param esType   type
+     * @param scrollId id
+     */
     EsStoreService.prototype.scroll = function (esIndex, esType, scrollId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -294,15 +300,18 @@ var EsStoreService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         this.client = new elasticsearch_1.Client(globalOptions);
-                        this.client.ping({
-                            requestTimeout: 3000
-                        }).then(function () {
-                            _this.$logger.info("elasticsearh as well");
-                        }, function (err) {
-                            _this.$logger.error("elasticsearch cluster is down!", err);
-                        });
-                        return [4 /*yield*/, bluebird.delay(200)];
+                        return [4 /*yield*/, this.client.ping({
+                                requestTimeout: 3000
+                            }).then(function () {
+                                _this.$logger.info("elasticsearh as well");
+                            }, function (err) {
+                                _this.$logger.error("elasticsearch cluster is down!", err);
+                                throw err;
+                            })];
                     case 1:
+                        _a.sent();
+                        return [4 /*yield*/, bluebird.delay(200)];
+                    case 2:
                         _a.sent();
                         return [2 /*return*/, this];
                 }

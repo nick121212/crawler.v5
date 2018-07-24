@@ -1,10 +1,16 @@
 import _ from "lodash";
 import jpp from "json-pointer";
+import { injectable } from "inversify";
 
-import { Base } from "./base";
+import { BaseAnalysis } from "./base";
 import jsdom from "../html/jsdom";
+import { IQueueItem } from "../../models/queueitem";
 
-export class Strategy extends Base {
+@injectable()
+
+export class ArrayStrategy extends BaseAnalysis {
+    public ayalysisName = "array";
+
     /**
      * 解析数组的元素数据
      * @param queueItem {Object}  链接信息
@@ -14,7 +20,7 @@ export class Strategy extends Base {
      * @param index     {Number}  jquery索引
      * @returns Promise
      */
-    public doDeal(queueItem: any, data: any, results: any, $: any, index: number): Promise<any> {
+    public doDeal(queueItem: IQueueItem, data: any, results: any, $: any, index: number): Promise<any> {
         let jData = jpp(results);
         let path: Array<string> = [];
         let idx = _.isUndefined(data.dataIndex) ? index : data.dataIndex;
@@ -61,5 +67,3 @@ export class Strategy extends Base {
         });
     }
 }
-
-export default new Strategy();

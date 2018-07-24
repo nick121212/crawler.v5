@@ -1,37 +1,33 @@
 import _ from "lodash";
-import { Base } from "./base";
+import { multiInject } from "inversify";
+
+import { BaseAnalysis } from "./base";
 import { IQueueItem } from "../../models/queueitem";
 
-import area from "./area";
-import array from "./array";
-import case1 from "./case";
-import normal from "./normal";
-import object from "./object";
-import or1 from "./or";
-import switch1 from "./switch";
+export { AreaStrategy } from "./area";
+export { ArrayStrategy } from "./array";
+export { CaseStrategy } from "./case";
+export { NormalStrategy } from "./normal";
+export { ObjectStrategy } from "./object";
+export { OrStrategy } from "./or";
+export { SwitchStrategy } from "./switch";
+export { BaseAnalysis } from "./base";
 
 /**
  * 处理html文本策越
  */
-export class Strategy extends Base {
+export class AnalysisStrategy extends BaseAnalysis {
     /**
      * 构造函数
      * 注册默认的解析策略
      */
-    constructor() {
+    constructor(@multiInject(BaseAnalysis) analysises: BaseAnalysis[]) {
         super();
 
-        this.deals.area = area;
-        this.deals.array = array;
-        this.deals.case = case1;
-        this.deals.normal = normal;
-        this.deals.object = object;
-        this.deals.or = or1;
-        this.deals.switch = switch1;
-
-        _.forEach(this.deals, (deal: any) => {
-            if (deal) {
-                deal.deals = this.deals;
+        analysises.forEach((ayalysis: BaseAnalysis) => {
+            if (ayalysis.ayalysisName) {
+                this.deals[ayalysis.ayalysisName] = ayalysis;
+                ayalysis.deals = this.deals;
             }
         });
     }
@@ -75,5 +71,3 @@ export class Strategy extends Base {
         });
     }
 }
-
-export default new Strategy();

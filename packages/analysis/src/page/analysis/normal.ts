@@ -1,10 +1,15 @@
 import _ from "lodash";
 import jpp from "json-pointer";
+import { injectable } from "inversify";
 
-import { Base } from "./base";
+import { BaseAnalysis } from "./base";
 import jsdom from "../html/jsdom";
+import { IQueueItem } from "../../models/queueitem";
 
-export class Strategy extends Base {
+@injectable()
+
+export class NormalStrategy extends BaseAnalysis {
+    public ayalysisName = "normal";
     /**
      * 构造函数
      * 注册默认的解析策略
@@ -22,7 +27,7 @@ export class Strategy extends Base {
      * @param   {any}     index     当前的数组索引
      * @returns {Promise}
      */
-    public doDeal(queueItem: any, data: any, results: any, $: any, index: number): Promise<any> {
+    public doDeal(queueItem: IQueueItem, data: any, results: any, $: any, index: number): Promise<any> {
         let promise = jsdom.doDeal(queueItem, data, $, index).then((res) => {
             let jData = jpp(results);
             let path: Array<string> = [];
@@ -45,5 +50,3 @@ export class Strategy extends Base {
         return promise;
     }
 }
-
-export default new Strategy();

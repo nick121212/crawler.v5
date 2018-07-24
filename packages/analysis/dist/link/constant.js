@@ -1,5 +1,7 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // 正则，用来匹配页面中的地址
-export const discoverRegex = [
+exports.discoverRegex = [
     /\s(?:href|src)\s?=\s?([""]).*?\1/ig,
     /\s(?:href|src)\s?=\s?[^""\s][^\s>]+/ig,
     /\s?url\(([""]).*?\1\)/ig,
@@ -37,7 +39,7 @@ export const discoverRegex = [
     }
 ];
 // 过滤掉静态资源
-export const suffixs = [
+exports.suffixs = [
     "ico",
     "png",
     "jpg",
@@ -47,7 +49,7 @@ export const suffixs = [
     "css"
 ];
 // Matching MIME-types will be allowed to fetch further than max depth
-export const whitelistedMimeTypes = [
+exports.whitelistedMimeTypes = [
     /^text\/(css|javascript|ecmascript)/i,
     /^application\/javascript/i,
     /^application\/x-font/i,

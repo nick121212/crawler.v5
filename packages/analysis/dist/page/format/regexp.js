@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const replaceRegexp = (str) => {
     str = str || "";
     str = str.toString();
@@ -6,7 +8,7 @@ const replaceRegexp = (str) => {
 /**
  * 处理html文本策越
  */
-export class Strategy {
+class Strategy {
     /**
      * 正则匹配数据
      * @returns {String}
@@ -24,5 +26,6 @@ export class Strategy {
         return result;
     }
 }
-export default new Strategy();
+exports.Strategy = Strategy;
+exports.default = new Strategy();
 //# sourceMappingURL=/srv/crawler.v5/packages/analysis/maps/page/format/regexp.js.map

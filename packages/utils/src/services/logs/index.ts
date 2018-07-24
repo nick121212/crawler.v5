@@ -1,5 +1,7 @@
-import "reflect-metadata";
 import { colorConsole, console, Tracer } from "tracer";
+import * as config from "config";
 
-export const colorLog: Tracer.Logger = colorConsole();
-export const log: Tracer.Logger = console({});
+const logConfig: any = config.has("log") ? config.get("log") : {};
+
+export const colorLog: Tracer.Logger = colorConsole(logConfig);
+export const log: Tracer.Logger = console(logConfig);
