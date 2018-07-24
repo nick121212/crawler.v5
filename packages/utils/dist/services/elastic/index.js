@@ -140,14 +140,23 @@ var EsStoreService = /** @class */ (function () {
                             })];
                     case 2:
                         urlsResult = _a.sent();
-                        return [2 /*return*/, urlsResult.items.map(function (url) {
-                                if (url.create && url.create.created) {
-                                    return urlsById[url.create._id];
+                        return [2 /*return*/, urlsResult.items.map(function (result) {
+                                if (result.create && (result.create.created || result.create.result === "created")) {
+                                    return urlsById[result.create._id];
                                 }
                                 return null;
                             })];
                     case 3: return [2 /*return*/, []];
                 }
+            });
+        });
+    };
+    EsStoreService.prototype.clearUrls = function (esIndex) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.client.indices.delete({
+                        index: esIndex
+                    })];
             });
         });
     };

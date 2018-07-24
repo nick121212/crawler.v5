@@ -20,8 +20,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("cralwer.v5.utils/dist/services/elastic/index");
-const index_2 = require("cralwer.v5.utils/dist/services/rabbitmq/index");
+const index_1 = require("crawler.v5.utils/dist/services/elastic/index");
+const index_2 = require("crawler.v5.utils/dist/services/rabbitmq/index");
 const inversify_1 = require("inversify");
 const download_1 = require("./download");
 const link_1 = require("./link");
@@ -92,9 +92,9 @@ const config1 = {
     },
     "urls": ["http://www.yaolan.com", "http://bbs.yaolan.com"]
 };
+// process.on("UnhandledPromiseRejection", console.log);
 let Test = class Test {
     constructor($downloader, $linker, $mq, $es) {
-        // Tracer.
         this.$downloader = $downloader;
         this.$linker = $linker;
         this.$mq = $mq;
@@ -107,16 +107,14 @@ let Test = class Test {
         }, (data) => __awaiter(this, void 0, void 0, function* () {
             return this.doDeal(data.url).then((d) => {
                 return d;
-            }).catch((e) => {
-                console.log("--------------", e);
-            });
+            }).catch((() => void (0)));
         }), 1, 3000).then(() => {
-            return this.doDeal("http://www.yaolan.com");
+            return this.doDeal("http://www.yaolan.com").catch((() => void (0)));
         });
     }
     doDeal(url) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.$downloader.start(url, {}).then((data) => {
+            return this.$downloader.start(url, {}).then((data) => {
                 config.queueItem.responseBody = data.responseBody;
                 return this.$linker.getAllowsUrls(config.queueItem, {
                     "parseHTMLComments": false,
@@ -128,14 +126,18 @@ let Test = class Test {
                     "maxDepth": 0,
                     "ignoreRobots": true
                 }, config1.queueConfig);
-            }).then((allowUrls) => __awaiter(this, void 0, void 0, function* () {
-                yield this.$es.init({
+            }).then((allowUrls) => {
+                return this.$es.init({
                     "host": "localhost:9200",
+                    "log": [],
                     "httpAuth": "",
                     "sniffInterval": 30000,
                     "requestTimeout": 20000,
                     "keepAlive": true
+                }).then(() => {
+                    return allowUrls;
                 });
+            }).then((allowUrls) => __awaiter(this, void 0, void 0, function* () {
                 yield this.$es.saveUrls(allowUrls, "yaolan", "urls");
                 return this.$mq.addItemsToQueue(allowUrls);
             }));

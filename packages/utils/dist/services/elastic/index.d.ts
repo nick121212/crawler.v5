@@ -13,6 +13,7 @@ export declare class EsStoreService {
      * @param esType   type
      */
     saveUrls(urls: Array<any>, esIndex: string, esType: string): Promise<Array<any>>;
+    clearUrls(esIndex: string): Promise<any>;
     /**
      * 存储当前的地址
      * @param queueItem  数据

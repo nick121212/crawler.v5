@@ -20,7 +20,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lodash_1 = require("lodash");
+const _ = require("lodash");
 const inversify_1 = require("inversify");
 const queue_1 = require("./queue");
 const discover_1 = require("./discover");
@@ -41,11 +41,11 @@ let Linker = class Linker {
      */
     formatUrlsToUri(urls, queueItem, queueConfig) {
         const queue = new queue_1.Queue(queueConfig);
-        const allowUrls = lodash_1.default.map(urls, (url) => {
+        const allowUrls = _.map(urls, (url) => {
             return queue.queueURL(url, queueItem || {});
         });
         this.$logger.debug("formatUrlsToUri", allowUrls);
-        return lodash_1.default.filter(allowUrls, (q) => {
+        return _.filter(allowUrls, (q) => {
             return !!q;
         });
     }

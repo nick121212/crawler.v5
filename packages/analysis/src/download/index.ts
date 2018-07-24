@@ -1,5 +1,7 @@
 import { ModelProxy, BaseEngine } from "modelproxy";
-import { inject, injectable, multiInject } from "inversify";
+import { inject, injectable, multiInject, tagged } from "inversify";
+import { IInterfaceModel } from "modelproxy/out/models/interface";
+import { Tracer } from "tracer";
 
 export { PhantomEngine } from "./engines/phantom";
 export { SuperAgentEngine } from "./engines/superagent";
@@ -7,17 +9,18 @@ export { RequestEngine } from "./engines/request";
 
 @injectable()
 export class Downloader {
-    constructor(@inject(ModelProxy) private $proxy: ModelProxy, @multiInject("ModelProxyEngine") engines: (BaseEngine<any> & { engineName: string })[]) {
+    constructor(
+        @inject(ModelProxy) private $proxy: ModelProxy,
+        @multiInject("ModelProxyEngine") engines: (BaseEngine<any> & { engineName: string })[],
+        @inject("log") @tagged("color", true) private $logger: Tracer.Logger
+    ) {
         engines.forEach((engine: BaseEngine<any> & { engineName: string }) => {
             $proxy.addEngines({
                 [engine.engineName]: engine,
             });
         });
-    }
 
-    public async start(url: string, settings: any, engine = "request"): Promise<{ headers: any, responseBody: string, statusCode: number }> {
         this.$proxy.loadConfig({
-            "engine": engine,
             "interfaces": [{
                 "key": "download",
                 "method": "get",
@@ -26,21 +29,51 @@ export class Downloader {
             }],
             "key": "download",
             "state": "html",
-            "states": {
-                "html": url
-            },
             "title": "download下载接口",
         }, {});
+    }
 
+    public async start(url: string, settings: any = {}, engine = "request"): Promise<{ headers: any, responseBody: string, statusCode: number }> {
         const res = await this.$proxy.execute("download", "download", {
-            settings
+            ...settings,
+            instance: {
+                "engine": engine,
+                "states": {
+                    "html": url
+                }
+            }
         });
+
+        this.$logger.info(url);
 
         return {
             headers: res.headers,
             responseBody: res.body,
             statusCode: res.statusCode,
         };
+    }
+
+    /**
+     * 获取当前链接的详细链接
+     * @param url       链接
+     * @param settings  参数
+     */
+    public getFullUrl(url: string, settings: any = {}): string {
+        const ns = this.$proxy.getNs("download");
+        const inter: IInterfaceModel | null = ns.get("download");
+
+        if (inter) {
+            return inter.getFullPath({
+                ...settings,
+                instance: {
+                    "states": {
+                        "html": url
+                    }
+                }
+            });
+        }
+
+        return "";
     }
 }
 

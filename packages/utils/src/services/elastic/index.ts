@@ -96,9 +96,9 @@ export class EsStoreService {
                 body: docs
             });
 
-            return urlsResult.items.map((url: any) => {
-                if (url.create && url.create.created) {
-                    return urlsById[url.create._id];
+            return urlsResult.items.map((result: any) => {
+                if (result.create && (result.create.created || result.create.result === "created")) {
+                    return urlsById[result.create._id];
                 }
 
                 return null;
@@ -106,6 +106,12 @@ export class EsStoreService {
         }
 
         return [];
+    }
+
+    public async clearUrls(esIndex: string) {
+        return this.client.indices.delete({
+            index: esIndex
+        });
     }
 
     /**

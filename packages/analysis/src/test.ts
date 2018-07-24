@@ -1,5 +1,5 @@
-import { EsStoreService } from "cralwer.v5.utils/dist/services/elastic/index";
-import { MQueueService } from "cralwer.v5.utils/dist/services/rabbitmq/index";
+import { EsStoreService } from "crawler.v5.utils/dist/services/elastic/index";
+import { MQueueService } from "crawler.v5.utils/dist/services/rabbitmq/index";
 import { injectable, inject } from "inversify";
 
 import { Downloader } from "./download";
@@ -74,6 +74,9 @@ const config1 = {
     "urls": ["http://www.yaolan.com", "http://bbs.yaolan.com"]
 };
 
+
+// process.on("UnhandledPromiseRejection", console.log);
+
 @injectable()
 export class Test {
     constructor(
@@ -82,9 +85,6 @@ export class Test {
         @inject(MQueueService) private $mq: MQueueService,
         @inject(EsStoreService) private $es: EsStoreService
     ) {
-
-        // Tracer.
-
         $mq.start("yaolan", {
             protocol: "amqp",
             hostname: "localhost",
@@ -93,16 +93,14 @@ export class Test {
         }, async (data: any) => {
             return this.doDeal(data.url).then((d: any) => {
                 return d;
-            }).catch((e) => {
-                console.log("--------------", e);
-            });
+            }).catch((() => void (0)));
         }, 1, 3000).then(() => {
-            return this.doDeal("http://www.yaolan.com");
+            return this.doDeal("http://www.yaolan.com").catch((() => void (0)));
         });
     }
 
     private async doDeal(url: string) {
-        this.$downloader.start(url, {}).then((data: any) => {
+        return this.$downloader.start(url, {}).then((data: any) => {
             config.queueItem.responseBody = data.responseBody;
 
             return this.$linker.getAllowsUrls(config.queueItem, {
@@ -115,14 +113,18 @@ export class Test {
                 "maxDepth": 0,
                 "ignoreRobots": true
             }, config1.queueConfig);
-        }).then(async (allowUrls: any[]) => {
-            await this.$es.init({
+        }).then((allowUrls: any[]) => {
+            return this.$es.init({
                 "host": "localhost:9200",
+                "log": [],
                 "httpAuth": "",
                 "sniffInterval": 30000,
                 "requestTimeout": 20000,
                 "keepAlive": true
+            }).then(() => {
+                return allowUrls;
             });
+        }).then(async (allowUrls: any[]) => {
 
             await this.$es.saveUrls(allowUrls, "yaolan", "urls");
 

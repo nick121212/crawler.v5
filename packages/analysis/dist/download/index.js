@@ -29,34 +29,35 @@ exports.SuperAgentEngine = superagent_1.SuperAgentEngine;
 var request_1 = require("./engines/request");
 exports.RequestEngine = request_1.RequestEngine;
 let Downloader = class Downloader {
-    constructor($proxy, engines) {
+    constructor($proxy, engines, $logger) {
         this.$proxy = $proxy;
+        this.$logger = $logger;
         engines.forEach((engine) => {
             $proxy.addEngines({
                 [engine.engineName]: engine,
             });
         });
+        this.$proxy.loadConfig({
+            "interfaces": [{
+                    "key": "download",
+                    "method": "get",
+                    "path": "",
+                    "title": ""
+                }],
+            "key": "download",
+            "state": "html",
+            "title": "download下载接口",
+        }, {});
     }
-    start(url, settings, engine = "request") {
+    start(url, settings = {}, engine = "request") {
         return __awaiter(this, void 0, void 0, function* () {
-            this.$proxy.loadConfig({
-                "engine": engine,
-                "interfaces": [{
-                        "key": "download",
-                        "method": "get",
-                        "path": "",
-                        "title": ""
-                    }],
-                "key": "download",
-                "state": "html",
-                "states": {
-                    "html": url
-                },
-                "title": "download下载接口",
-            }, {});
-            const res = yield this.$proxy.execute("download", "download", {
-                settings
-            });
+            const res = yield this.$proxy.execute("download", "download", Object.assign({}, settings, { instance: {
+                    "engine": engine,
+                    "states": {
+                        "html": url
+                    }
+                } }));
+            this.$logger.info(url);
             return {
                 headers: res.headers,
                 responseBody: res.body,
@@ -64,11 +65,30 @@ let Downloader = class Downloader {
             };
         });
     }
+    /**
+     * 获取当前链接的详细链接
+     * @param url       链接
+     * @param settings  参数
+     */
+    getFullUrl(url, settings = {}) {
+        const ns = this.$proxy.getNs("download");
+        const inter = ns.get("download");
+        if (inter) {
+            return inter.getFullPath(Object.assign({}, settings, { instance: {
+                    "states": {
+                        "html": url
+                    }
+                } }));
+        }
+        return "";
+    }
 };
 Downloader = __decorate([
     inversify_1.injectable(),
-    __param(0, inversify_1.inject(modelproxy_1.ModelProxy)), __param(1, inversify_1.multiInject("ModelProxyEngine")),
-    __metadata("design:paramtypes", [modelproxy_1.ModelProxy, Array])
+    __param(0, inversify_1.inject(modelproxy_1.ModelProxy)),
+    __param(1, inversify_1.multiInject("ModelProxyEngine")),
+    __param(2, inversify_1.inject("log")), __param(2, inversify_1.tagged("color", true)),
+    __metadata("design:paramtypes", [modelproxy_1.ModelProxy, Array, Object])
 ], Downloader);
 exports.Downloader = Downloader;
 // /**

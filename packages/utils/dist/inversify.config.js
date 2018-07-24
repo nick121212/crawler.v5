@@ -35,11 +35,23 @@ exports.utilsContainer.load(exports.logs, exports.jsonata, exports.mq, exports.e
 //     "sniffInterval": 30000,
 //     "requestTimeout": 20000,
 //     "keepAlive": true
-// }).then((esStore: EsStoreService) => {
-//     // esStore.getItem();
-//     console.log(esStore);
+// }).then(() => {
+//     return es1.clearUrls("ddd");
+// }).then(() => {
+//     return es1.saveUrls([{
+//         protocol: "https",
+//         hostname: "mp.weixin.qq.com",
+//         query: "token=1498148810&lang=zh_CN&f=json&ajax=1&random=0.9634021943714353&action=list_ex&begin=5&count=5&query=&fakeid=MzA5MzkwNzM2OQ%253D%253D&type=9",
+//         port: 80,
+//         path: "/cgi-bin/appmsg",
+//         depth: 2,
+//         url: "https://mp.weixin.qq.com/cgi-bin/appmsg?token=1498148810&lang=zh_CN&f=json&ajax=1&random=0.9634021943714353&action=list_ex&begin=5&count=5&query=&fakeid=MzA5MzkwNzM2OQ%253D%253D&type=9",
+//         _id: "c30f5fb22b25482eaa5c268630663570"
+//     }], "ddd", "urls");
+// }).then((d: any) => {
+//     console.log(d);
 // }).catch((e: Error) => {
-//     console.log("---------",e);
+//     console.log("---------", e);
 // });
 // const mq = utilsContainer.get(MQueueService);
 // mq.start("test", {
