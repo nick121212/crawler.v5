@@ -1,6 +1,6 @@
 {
   "name": "crawler.v5.utils",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "amqplib": "^0.5.2",
+    "config": "^1.31.0",
     "elasticsearch": "^15.1.1",
     "inversify": "^4.13.0",
     "inversify-tracer": "^1.2.0",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@types/amqplib": "^0.5.8",
+    "@types/config": "^0.0.34",
     "@types/elasticsearch": "^5.0.25",
     "@types/inversify": "^2.0.33",
     "@types/jsdom": "^2.0.32",
