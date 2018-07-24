@@ -31,6 +31,11 @@ export class Test {
         @inject(MQueueService) private $mq: MQueueService,
         @inject(EsStoreService) private $es: EsStoreService
     ) {
+
+        this.$downloader.start("https://mmbiz.qpic.cn/mmbiz_png/slNte3rbPWMn8t2b40bgudkdHkriaWLO81UF3uLhl03iadI4zp77icjgpaIlYzH4OrJOoPkSiaicgroS2m6BPgS8qJg/640?",{}, "phantom").then((data)=>{
+            console.log(data);
+        });
+
         // this.$mq.start("zzhao", {
         //     protocol: "amqp",
         //     hostname: "localhost",

@@ -42,6 +42,13 @@ const config = {
 };
 let Test = class Test {
     constructor($downloader, $linker, $mq, $es) {
+        this.$downloader = $downloader;
+        this.$linker = $linker;
+        this.$mq = $mq;
+        this.$es = $es;
+        this.$downloader.start("https://mmbiz.qpic.cn/mmbiz_png/slNte3rbPWMn8t2b40bgudkdHkriaWLO81UF3uLhl03iadI4zp77icjgpaIlYzH4OrJOoPkSiaicgroS2m6BPgS8qJg/640?", {}, "phantom").then((data) => {
+            console.log(data);
+        });
         // this.$mq.start("zzhao", {
         //     protocol: "amqp",
         //     hostname: "localhost",
@@ -50,10 +57,6 @@ let Test = class Test {
         // }, async (data: any) => {
         //     // console.log(data, data.url, qs.parse(data.query));
         //     // throw new Error(data);
-        this.$downloader = $downloader;
-        this.$linker = $linker;
-        this.$mq = $mq;
-        this.$es = $es;
         //     return this.doDeal("https://mp.weixin.qq.com/cgi-bin/appmsg", {
         //         params: qs.parse(data.query),
         //         settings: {
