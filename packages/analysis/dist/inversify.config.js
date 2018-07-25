@@ -7,7 +7,6 @@ const download_1 = require("./download");
 const link_1 = require("./link");
 const analysis_1 = require("./page/analysis");
 const page_1 = require("./page");
-const zzhao_1 = require("./zzhao");
 const container = new inversify_1.Container();
 inversify_1.decorate(inversify_1.injectable(), modelproxy_1.Compose);
 inversify_1.decorate(inversify_1.injectable(), modelproxy_1.ModelProxy);
@@ -36,8 +35,5 @@ const pager = new inversify_1.ContainerModule((bind) => {
     bind(analysis_1.SwitchStrategy).toSelf().inSingletonScope();
 });
 container.load(downloader, linker, pager);
-container.bind(zzhao_1.Test).toSelf();
-const analysisContainer = inversify_1.Container.merge(crawler_v5_utils_1.utilsContainer, container);
-analysisContainer.get(zzhao_1.Test);
-exports.default = analysisContainer;
+exports.default = inversify_1.Container.merge(crawler_v5_utils_1.utilsContainer, container);
 //# sourceMappingURL=/srv/crawler.v5/packages/analysis/maps/inversify.config.js.map

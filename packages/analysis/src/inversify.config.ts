@@ -10,8 +10,6 @@ import {
 } from "./page/analysis";
 import { HtmlPager } from "./page";
 
-import { Test } from "./zzhao";
-
 const container = new Container();
 
 decorate(injectable(), Compose);
@@ -48,10 +46,4 @@ const pager = new ContainerModule((bind: interfaces.Bind) => {
 
 container.load(downloader, linker, pager);
 
-container.bind<Test>(Test).toSelf();
-
-const analysisContainer = Container.merge(utilsContainer, container);
-
-analysisContainer.get(Test);
-
-export default analysisContainer;
+export default Container.merge(utilsContainer, container);

@@ -32,6 +32,7 @@ export class Test {
         @inject(EsStoreService) private $es: EsStoreService
     ) {
 
+        // tslint:disable-next-line:max-line-length
         // this.$downloader.start("https://mmbiz.qpic.cn/mmbiz_png/slNte3rbPWMn8t2b40bgudkdHkriaWLO81UF3uLhl03iadI4zp77icjgpaIlYzH4OrJOoPkSiaicgroS2m6BPgS8qJg/640?", {}, "picdown").then((data) => {
         //     console.log(data);
         // });
