@@ -1,6 +1,6 @@
 {
   "name": "cralwer.v5.analysis",
-  "version": "1.0.0",
+  "version": "1.0.8",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "dependencies": {
     "blueimp-md5": "^2.10.0",
     "config": "^1.31.0",
-    "crawler.v5.utils": "^1.0.7",
+    "crawler.v5.utils": "^1.0.8",
     "inversify": "^4.13.0",
     "inversify-tracer": "^1.2.0",
     "jquery": "^3.3.1",
