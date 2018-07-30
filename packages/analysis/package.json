@@ -1,6 +1,6 @@
 {
-  "name": "cralwer.v5.analysis",
-  "version": "1.0.8",
+  "name": "crawler.v5.analysis",
+  "version": "1.0.9",
   "description": "",
   "main": "index.js",
   "scripts": {
